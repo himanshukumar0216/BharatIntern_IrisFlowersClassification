@@ -1,0 +1,46 @@
+# Import necessary libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import classification_report, accuracy_score
+
+# Load the Iris dataset
+iris = datasets.load_iris()
+data = pd.DataFrame(data=np.c_[iris['data'], iris['target']], columns=iris['feature_names'] + ['target'])
+
+# Explore the dataset (optional)
+print(data.head())
+
+# Extract features (petal length and sepal length) and target variable (species)
+X = data[['petal length (cm)', 'sepal length (cm)']]
+y = data['target']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Initialize the K-Nearest Neighbors (KNN) classifier
+k = 3  # You can choose a different value for k
+model = KNeighborsClassifier(n_neighbors=k)
+
+# Fit the model on the training data
+model.fit(X_train, y_train)
+
+# Make predictions on the testing data
+y_pred = model.predict(X_test)
+
+# Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+report = classification_report(y_test, y_pred, target_names=iris.target_names)
+
+print(f"Accuracy: {accuracy}")
+print("Classification Report:\n", report)
+
+# Visualize the results (optional)
+plt.scatter(X_test['petal length (cm)'], X_test['sepal length (cm)'], c=y_pred)
+plt.xlabel("Petal Length (cm)")
+plt.ylabel("Sepal Length (cm)")
+plt.title("Iris Flower Classification")
+plt.show()
