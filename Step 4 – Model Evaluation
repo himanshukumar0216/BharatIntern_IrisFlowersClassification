@@ -1,0 +1,7 @@
+# Predict from the test dataset
+predictions = svn.predict(X_test)
+
+# Calculate the accuracy
+from sklearn.metrics import accuracy_score
+accuracy_score(y_test, predictions)
+
